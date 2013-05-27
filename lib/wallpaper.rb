@@ -1,4 +1,3 @@
-require 'bundler/setup'
 require 'fileutils'
 require 'capybara-webkit'
 
@@ -11,7 +10,7 @@ end
 class Rubyistokei::Wallpaper::OSX
   class << self
     def run(option = {})
-      dir = File.expand_path("../tmp", __FILE__)
+      dir = File.expand_path("../../tmp", __FILE__)
       cleanup(dir) unless option[:no_cleanup]
       file = take_screenshot(dir)
       set_wallpaper(file)
@@ -36,11 +35,4 @@ class Rubyistokei::Wallpaper::OSX
       FileUtils.rm Dir.glob(File.join(dir,'screenshot-*.png'))
     end
   end
-end
-
-if $0 == __FILE__
-  option = {
-    no_cleanup: ARGV.include?("--no-cleanup")
-  }
-  Rubyistokei::Wallpaper::OSX.run(option)
 end

@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+require './lib/wallpaper'
+
+option = {
+  no_cleanup: ARGV.include?("--no-cleanup")
+}
+Rubyistokei::Wallpaper::OSX.run(option)
