@@ -1,4 +1,5 @@
 require 'bundler/setup'
+require 'fileutils'
 require 'capybara-webkit'
 
 module Rubyistokei
@@ -9,9 +10,9 @@ end
 
 class Rubyistokei::Wallpaper::OSX
   class << self
-
-    def run
+    def run(option = {})
       dir = File.expand_path("../tmp", __FILE__)
+      cleanup(dir) unless option[:no_cleanup]
       file = take_screenshot(dir)
       set_wallpaper(file)
     end
@@ -31,9 +32,15 @@ class Rubyistokei::Wallpaper::OSX
       `osascript -e 'tell application "Finder" to set desktop picture to "#{file}" as POSIX file'`
     end
 
+    def cleanup(dir)
+      FileUtils.rm Dir.glob(File.join(dir,'screenshot-*.png'))
+    end
   end
 end
 
 if $0 == __FILE__
-  Rubyistokei::Wallpaper::OSX.run
+  option = {
+    no_cleanup: ARGV.include?("--no-cleanup")
+  }
+  Rubyistokei::Wallpaper::OSX.run(option)
 end
